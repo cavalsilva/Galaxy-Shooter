@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+    [SerializeField]
+    private GameObject _laserPrefab;
+    [SerializeField]
+    private float _fireRate = 0.25f;
 
-    public GameObject laserPrefab;
+    private float _canFire = 0.0f;
 
     [SerializeField]
-    private float speed = 5.0f;
+    private float _speed = 5.0f;
     
     // Use this for initialization
 	void Start ()
@@ -21,9 +25,18 @@ public class Player : MonoBehaviour {
     {
         Movement();
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButton(0))
         {
-            Instantiate(laserPrefab, transform.position + new Vector3(0, 0.88f, 0), Quaternion.identity);
+            Shoot();
+        }
+    }
+
+    private void Shoot()
+    {
+        if (Time.time > _canFire)
+        {
+            _canFire = Time.time + _fireRate;
+            Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.88f, 0), Quaternion.identity);
         }
     }
 
@@ -32,8 +45,8 @@ public class Player : MonoBehaviour {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        transform.Translate(Vector3.right * speed * horizontalInput * Time.deltaTime);
-        transform.Translate(Vector3.up * speed * verticalInput * Time.deltaTime);
+        transform.Translate(Vector3.right * _speed * horizontalInput * Time.deltaTime);
+        transform.Translate(Vector3.up * _speed * verticalInput * Time.deltaTime);
 
         //Player bounds
         if (transform.position.y > 4.2f)
