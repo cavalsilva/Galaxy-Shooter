@@ -2,10 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour
+{
+
+    public bool canTripleShot = false;
 
     [SerializeField]
     private GameObject _laserPrefab;
+
+    [SerializeField]
+    private GameObject _tripleLaserPrefab;
+
     [SerializeField]
     private float _fireRate = 0.25f;
 
@@ -13,15 +20,15 @@ public class Player : MonoBehaviour {
 
     [SerializeField]
     private float _speed = 5.0f;
-    
+
     // Use this for initialization
-	void Start ()
+    void Start()
     {
         transform.position = new Vector3(0, 0, 0);
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    }
+
+    // Update is called once per frame
+    void Update()
     {
         Movement();
 
@@ -35,10 +42,18 @@ public class Player : MonoBehaviour {
     {
         if (Time.time > _canFire)
         {
+            if (canTripleShot)
+            {
+                Instantiate(_tripleLaserPrefab, transform.position, Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.88f, 0), Quaternion.identity);
+            }
             _canFire = Time.time + _fireRate;
-            Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.88f, 0), Quaternion.identity);
         }
     }
+
 
     private void Movement()
     {
@@ -68,5 +83,11 @@ public class Player : MonoBehaviour {
         {
             transform.position = new Vector3(9.5f, transform.position.y, 0);
         }
+    }
+
+    public IEnumerator TrippeShotPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5.0f);
+        canTripleShot = false;
     }
 }
