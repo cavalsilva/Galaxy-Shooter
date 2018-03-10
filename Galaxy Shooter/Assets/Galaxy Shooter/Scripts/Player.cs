@@ -17,10 +17,13 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _fireRate = 0.25f;
 
-    private float _canFire = 0.0f;
-
     [SerializeField]
     private float _speed = 5.0f;
+
+    [SerializeField]
+    private int _lifes = 3;
+
+    private float _canFire = 0.0f;
 
     // Use this for initialization
     void Start()
@@ -54,7 +57,6 @@ public class Player : MonoBehaviour
             _canFire = Time.time + _fireRate;
         }
     }
-
 
     private void Movement()
     {
@@ -93,6 +95,17 @@ public class Player : MonoBehaviour
         else if (transform.position.x < -9.5f)
         {
             transform.position = new Vector3(9.5f, transform.position.y, 0);
+        }
+    }
+
+    public void Damage()
+    {
+        _lifes--;
+
+        if(_lifes < 1)
+        {
+            Debug.Log("Game Over");
+            Destroy(this.gameObject);
         }
     }
 
