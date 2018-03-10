@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
 
     public bool canTripleShot = false;
+    public bool canSpeedPower = false;
 
     [SerializeField]
     private GameObject _laserPrefab;
@@ -60,8 +61,18 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        transform.Translate(Vector3.right * _speed * horizontalInput * Time.deltaTime);
-        transform.Translate(Vector3.up * _speed * verticalInput * Time.deltaTime);
+        if (canSpeedPower)
+        {
+            //Add 1.5x from normal speed
+            transform.Translate(Vector3.right * _speed * 1.5f *  horizontalInput * Time.deltaTime);
+            transform.Translate(Vector3.up * _speed * 1.5f * verticalInput * Time.deltaTime);
+        }
+        else
+        {
+            transform.Translate(Vector3.right * _speed * horizontalInput * Time.deltaTime);
+            transform.Translate(Vector3.up * _speed * verticalInput * Time.deltaTime);
+
+        }
 
         //Player bounds
         if (transform.position.y > 4.2f)
@@ -85,9 +96,27 @@ public class Player : MonoBehaviour
         }
     }
 
-    public IEnumerator TrippeShotPowerDownRoutine()
+    public void TrippeShotPowerUpOn()
+    {
+        canTripleShot = true;
+        StartCoroutine(TrippeShotPowerDownRoutine());
+    }
+
+    public void SpeedBoostPowerOn()
+    {
+        canSpeedPower = true;
+        StartCoroutine(SpeedBoostDownRoutine());
+    }
+
+    IEnumerator TrippeShotPowerDownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
         canTripleShot = false;
+    }
+
+    IEnumerator SpeedBoostDownRoutine()
+    {
+        yield return new WaitForSeconds(5.0f);
+        canSpeedPower = false;
     }
 }

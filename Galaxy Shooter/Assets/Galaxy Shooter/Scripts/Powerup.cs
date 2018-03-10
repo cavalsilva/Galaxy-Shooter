@@ -6,6 +6,8 @@ public class Powerup : MonoBehaviour {
 
     [SerializeField]
     private float _speed = 3.0f;
+    [SerializeField]
+    private int _powerUpId; //0 = triple shot, 1 = speed boost, 2 = shield
 
 	// Use this for initialization
 	void Start () {
@@ -25,7 +27,21 @@ public class Powerup : MonoBehaviour {
 
             if(player != null)
             {
-                player.TrippeShotPowerDownRoutine();
+                //Enable triple shot
+                if(_powerUpId == 0)
+                {
+                    player.TrippeShotPowerUpOn();
+                }
+                //Enable speed boost
+                else if (_powerUpId == 1)
+                {
+                    player.SpeedBoostPowerOn();
+                }
+                //Enable shield
+                else if (_powerUpId == 2)
+                {
+                    player.TrippeShotPowerUpOn();
+                }
             }
 
             Destroy(this.gameObject);
