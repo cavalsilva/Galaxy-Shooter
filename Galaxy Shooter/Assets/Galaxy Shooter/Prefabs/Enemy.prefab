@@ -79,6 +79,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 5
+  _enemyExplosion: {fileID: 1346653378320314, guid: da0b6f3a8279f294493aa285bc06ac85,
+    type: 2}
 --- !u!212 &212131167810239628
 SpriteRenderer:
   m_ObjectHideFlags: 1
