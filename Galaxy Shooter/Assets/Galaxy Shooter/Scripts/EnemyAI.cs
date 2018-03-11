@@ -8,7 +8,7 @@ public class EnemyAI : MonoBehaviour {
     private float _speed = 5.0f;
 
     [SerializeField]
-    private GameObject _enemyExplosion;
+    private GameObject _enemyExplosionPrefab;
 
 	// Use this for initialization
 	void Start () {
@@ -44,7 +44,7 @@ public class EnemyAI : MonoBehaviour {
                 Destroy(other.transform.parent.gameObject);
             }
 
-            Instantiate(_enemyExplosion, transform.position, Quaternion.identity);
+            Instantiate(_enemyExplosionPrefab, transform.position, Quaternion.identity);
 
             Destroy(other.gameObject);
             Destroy(this.gameObject);
@@ -59,7 +59,7 @@ public class EnemyAI : MonoBehaviour {
 
             }
 
-            Instantiate(_enemyExplosion, transform.position, Quaternion.identity);
+            Instantiate(_enemyExplosionPrefab, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
 

@@ -40,7 +40,7 @@ public class Powerup : MonoBehaviour {
                 //Enable shield
                 else if (_powerUpId == 2)
                 {
-                    player.TrippeShotPowerUpOn();
+                    player.EnableShieldPowerOn();
                 }
             }
 

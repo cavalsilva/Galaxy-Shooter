@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
 
     public bool canTripleShot = false;
     public bool canSpeedPower = false;
+    public bool isShieldActive = false;
 
     [SerializeField]
     private GameObject _laserPrefab;
@@ -22,6 +23,12 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private int _lifes = 3;
+
+    [SerializeField]
+    private GameObject _explosionPrefab;
+
+    [SerializeField]
+    private GameObject _shieldGameObject;
 
     private float _canFire = 0.0f;
 
@@ -100,13 +107,22 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        _lifes--;
-
-        if(_lifes < 1)
+        if (isShieldActive)
         {
-            Debug.Log("Game Over");
-            Destroy(this.gameObject);
+            DisableShieldPowerOn();
+            return;
         }
+        else
+        {
+            _lifes--;
+
+            if (_lifes < 1)
+            {
+                Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+                Destroy(this.gameObject);
+            }
+        }
+
     }
 
     public void TrippeShotPowerUpOn()
@@ -119,6 +135,18 @@ public class Player : MonoBehaviour
     {
         canSpeedPower = true;
         StartCoroutine(SpeedBoostDownRoutine());
+    }
+
+    public void EnableShieldPowerOn()
+    {
+        isShieldActive = true;
+        _shieldGameObject.SetActive(true);
+    }
+
+    public void DisableShieldPowerOn()
+    {
+        isShieldActive = false;
+        _shieldGameObject.SetActive(false);
     }
 
     IEnumerator TrippeShotPowerDownRoutine()
