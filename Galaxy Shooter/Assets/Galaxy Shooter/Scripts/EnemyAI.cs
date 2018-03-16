@@ -10,8 +10,15 @@ public class EnemyAI : MonoBehaviour {
     [SerializeField]
     private GameObject _enemyExplosionPrefab;
 
-	// Use this for initialization
-	void Start () {
+    private UIManager _uIManager;
+    private GameManager _gameManager;
+
+    // Use this for initialization
+    void Start () {
+
+        _uIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
         //Random position
         transform.position = new Vector3(Random.Range(-7.5f, 7.5f), 7, 0);
     }
@@ -20,19 +27,26 @@ public class EnemyAI : MonoBehaviour {
 	void Update ()
     {
         //when off the screen
-        if (transform.position.y < -7)
-        {
-            //Random position
-            float randomX = Random.Range(-7.5f, 7.5f);
-            transform.position = new Vector3(randomX, 7, 0);
+        if (_gameManager.gameOver == false)
+        { 
+            if (transform.position.y < -7)
+            {
+                //Random position
+                float randomX = Random.Range(-7.5f, 7.5f);
+                transform.position = new Vector3(randomX, 7, 0);
+            }
+            else
+            {
+                //Movemente enemy
+                transform.Translate(Vector3.down * _speed * Time.deltaTime);
+            }
         }
-        else
+        else if (_gameManager.gameOver == true)
         {
-            //Movemente enemy
-            transform.Translate(Vector3.down * _speed * Time.deltaTime);
+            Destroy(this.gameObject);
         }
 
-	}
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -48,6 +62,8 @@ public class EnemyAI : MonoBehaviour {
 
             Destroy(other.gameObject);
             Destroy(this.gameObject);
+
+            _uIManager.UpdateScore(10);
         }
         else if (other.tag == "Player")
         {

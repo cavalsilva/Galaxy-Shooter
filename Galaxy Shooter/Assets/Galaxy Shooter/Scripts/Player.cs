@@ -32,10 +32,25 @@ public class Player : MonoBehaviour
 
     private float _canFire = 0.0f;
 
+    private UIManager _uIManager;
+    private GameManager _gameManager;
+    private SpawnManager _spawnManager;
+
+
     // Use this for initialization
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
+
+        _uIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+        if (_spawnManager != null)
+        {
+            _spawnManager.StartSpawnCoroutine();
+        }
+
     }
 
     // Update is called once per frame
@@ -115,10 +130,13 @@ public class Player : MonoBehaviour
         else
         {
             _lifes--;
+            _uIManager.UpdateLives(_lifes);
 
             if (_lifes < 1)
             {
                 Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+                _gameManager.gameOver = true;
+                _uIManager.ShowTitleScreen();
                 Destroy(this.gameObject);
             }
         }
